@@ -1,0 +1,104 @@
+version: '3.7'
+
+services:
+  postgresdb:  # Contenedor postgres
+    image: postgres:12.0-alpine
+    volumes:
+      - vol_postgresdb:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - net_postgresdb
+  api:  # Contenedor django + gunicorn
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-api
+      args:
+        - DDT_ENV=${DDT_ENV}
+        - DDT_SRC_DIR=${DDT_ROOT}/src
+        - POETRY_VERSION=${POETRY_VERSION}
+    env_file:
+      - .env
+    entrypoint:
+      - sh
+      - ${DDT_ROOT}/entrypoints/api.sh
+    volumes:
+      - ./api/:${DDT_ROOT}/src/
+      - ./entrypoints:${DDT_ROOT}/entrypoints/
+      - vol_static:${DDT_ROOT}/static
+      - vol_media:${DDT_ROOT}/media
+    networks:
+      - net_postgresdb
+      - net_api
+    depends_on:
+      - postgresdb   
+    restart: 'always'
+  nginx:  # Contenedor nginx (reverse proxy)
+    image: nginx:1.19.0-alpine
+    ports:
+      - ${DDT_PORT}:80
+      - 443:443
+    env_file:
+      - .env
+    entrypoint:
+      - sh
+      - ${DDT_ROOT}/entrypoints/nginx.sh
+    volumes:
+      - ./entrypoints/:${DDT_ROOT}/entrypoints/
+      - ./nginx/:${DDT_ROOT}/templates/
+      - vol_static:${DDT_ROOT}/static
+      - vol_media:${DDT_ROOT}/media
+      - vol_letsencrypt:/etc/letsencrypt
+      - vol_certbot:${DDT_ROOT}/certbot
+    networks:
+      - net_nginx
+      - net_api
+    depends_on:
+      - api
+    restart: 'always'
+  # certbot:  # Contenedor certbot (certificados SSL)
+  #   image: certbot/certbot
+  #   env_file:
+  #     - .env
+  #   entrypoint:
+  #     - sh
+  #     - ${DDT_ROOT}/entrypoints/certbot.sh
+  #   volumes:
+  #     - ./entrypoints/:${DDT_ROOT}/entrypoints/
+  #     - vol_letsencrypt:/etc/letsencrypt
+  #     - vol_certbot:${DDT_ROOT}/certbot
+  #   networks:
+  #     - net_nginx
+  #   depends_on:
+  #     - nginx
+  #   restart: 'always'
+
+networks:
+  net_postgresdb:
+    driver: bridge
+  net_api:
+    driver: bridge
+  net_nginx:
+    driver: bridge
+
+volumes:
+  vol_postgresdb:
+  vol_certbot:
+  vol_static:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vol/static
+      o: bind
+  vol_media:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vol/media
+      o: bind
+  vol_letsencrypt:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vol/letsencrypt
+      o: bind
