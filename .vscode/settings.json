@@ -1,0 +1,34 @@
+{
+    // Python - API
+    "python.pythonPath": "api/.venv/bin/python3",
+    "python.venvPath": "api/.venv/",
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--config=api/.flake8",
+    ],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length=80"
+    ],
+    "editor.rulers": [
+        80
+    ],
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true,
+    },
+    // JS - FRONT
+    "eslint.validate": [
+        "vue",
+        "javascript",
+        "javascriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "vetur.validation.template": false,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+}
