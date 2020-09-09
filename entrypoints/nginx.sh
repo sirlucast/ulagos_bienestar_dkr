@@ -7,7 +7,7 @@ echo "### DDT: NGINX -- WAITING FOR API"
 export API_STATUS_CMD="wget --server-response --spider http://api:8000 2>&1 | grep "HTTP/" | awk '{print $2}'"
 while [ -z "$(eval ${API_STATUS_CMD})" ]; do sleep 1s; done
 
-# Espera que el servicio de vue haya sido lanzado
+# # Espera que el servicio de vue haya sido lanzado
 # echo "### DDT: NGINX -- WAITING FOR VUE"
 # export VUE_STATUS_CMD="wget --server-response --spider http://vue:8080 2>&1 | grep "HTTP/" | awk '{print $2}'"
 # while [ -z "$(eval ${VUE_STATUS_CMD})" ]; do sleep 1s; done

@@ -27,12 +27,30 @@ services:
       - ./entrypoints:${DDT_ROOT}/entrypoints/
       - vol_static:${DDT_ROOT}/static
       - vol_media:${DDT_ROOT}/media
+      - vol_logs:${DDT_ROOT}/logs
     networks:
       - net_postgresdb
       - net_api
     depends_on:
       - postgresdb   
     restart: 'always'
+  # frontend:  # Contenedor vue
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile-front
+  #     args:
+  #       - DDT_ROOT=${DDT_ROOT}
+  #   env_file:
+  #     - .env
+  #   entrypoint:
+  #     - sh
+  #     - ${DDT_ROOT}/entrypoints/frontend.sh
+  #   volumes:
+  #     - ./frontend/src/:${DDT_ROOT}/src/
+  #     - ./entrypoints:${DDT_ROOT}/entrypoints/
+  #   networks:
+  #     - net_frontend
+  #   restart: 'always'
   nginx:  # Contenedor nginx (reverse proxy)
     image: nginx:1.19.0-alpine
     ports:
@@ -53,31 +71,35 @@ services:
     networks:
       - net_nginx
       - net_api
+      # - net_frontend
     depends_on:
       - api
+      # - frontend
     restart: 'always'
-  # certbot:  # Contenedor certbot (certificados SSL)
-  #   image: certbot/certbot
-  #   env_file:
-  #     - .env
-  #   entrypoint:
-  #     - sh
-  #     - ${DDT_ROOT}/entrypoints/certbot.sh
-  #   volumes:
-  #     - ./entrypoints/:${DDT_ROOT}/entrypoints/
-  #     - vol_letsencrypt:/etc/letsencrypt
-  #     - vol_certbot:${DDT_ROOT}/certbot
-  #   networks:
-  #     - net_nginx
-  #   depends_on:
-  #     - nginx
-  #   restart: 'always'
+  certbot:  # Contenedor certbot (certificados SSL)
+    image: certbot/certbot
+    env_file:
+      - .env
+    entrypoint:
+      - sh
+      - ${DDT_ROOT}/entrypoints/certbot.sh
+    volumes:
+      - ./entrypoints/:${DDT_ROOT}/entrypoints/
+      - vol_letsencrypt:/etc/letsencrypt
+      - vol_certbot:${DDT_ROOT}/certbot
+    networks:
+      - net_nginx
+    depends_on:
+      - nginx
+    restart: 'always'
 
 networks:
   net_postgresdb:
     driver: bridge
   net_api:
     driver: bridge
+  # net_frontend:
+  #   driver: bridge
   net_nginx:
     driver: bridge
 
@@ -95,6 +117,12 @@ volumes:
     driver_opts:
       type: none
       device: ${PWD}/vol/media
+      o: bind
+  vol_logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vol/logs
       o: bind
   vol_letsencrypt:
     driver: local
