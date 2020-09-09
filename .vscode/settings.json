@@ -23,11 +23,14 @@
     "eslint.validate": [
         "vue",
         "javascript",
+        "javascriptreact"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
     "vetur.validation.template": false,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
+    "files.eol": "\n",
 }
