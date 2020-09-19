@@ -3,8 +3,9 @@
     "[python]": {
         "editor.formatOnSave": true
     },
-    "python.pythonPath": "api/.venv/bin/python3",
     "python.venvPath": "api/.venv/",
+    "python.pythonPath": "api/.venv/bin/python3",
+    "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [
         "--config=api/.flake8",
@@ -22,23 +23,5 @@
         "**/.settings": true,
         "**/.factorypath": true,
     },
-    // JS - FRONT
-    "eslint.validate": [
-        "vue",
-        "javascript",
-        "javascriptreact"
-    ],
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "[javascript]": {
-        "editor.formatOnPaste": true,
-        "editor.formatOnSave": false,
-        "files.eol": "\n",
-    },
-    "vetur.validation.template": false,
-    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": false,
     "files.eol": "\n",
 }
