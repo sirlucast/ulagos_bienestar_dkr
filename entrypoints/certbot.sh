@@ -20,12 +20,12 @@ if [ ! -e "${LETSENCRYPT_DIR}/ulagos_ssl_done" ]; then
 
 	if [ ! -e "${LETSENCRYPT_DIR}/options-ssl-nginx.conf" ]; then
 		wget -O ${LETSENCRYPT_DIR}/options-ssl-nginx.conf \
-			https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/tls_configs/options-ssl-nginx.conf
+			https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
 	fi
 
 	if [ ! -e "${LETSENCRYPT_DIR}/ssl-dhparams.pem" ]; then
 		wget -O ${LETSENCRYPT_DIR}/ssl-dhparams.pem \
-			https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem
+			https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem
 	fi
 
     # Si se desean hacer pruebas, es necesario agregar argumento --staging
