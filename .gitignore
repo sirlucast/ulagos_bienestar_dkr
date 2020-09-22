@@ -145,12 +145,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # Docker volumes /vol
-!vol/
-!vol/letsencrypt/
 vol/letsencrypt/*
-!vol/media/
 vol/media/*
-!vol/static/
 vol/static/*
+vol/logs/*
 
 # End of https://www.toptal.com/developers/gitignore/api/osx,macos,linux,windows,visualstudiocode,sublimetext,git
