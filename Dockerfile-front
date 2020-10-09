@@ -11,21 +11,3 @@ COPY ./frontend/ "${DDT_ROOT}"/
 WORKDIR "${DDT_ROOT}"/
 
 RUN npm install
-
-# # develop stage
-# FROM node:11.1-alpine as develop-stage
-# ARG DDT_ROOT
-# WORKDIR "${DDT_ROOT}"
-# COPY package*.json ./
-# RUN npm install
-# COPY . . 
-
-# # build stage
-# FROM develop-stage as build-stage
-# RUN npm build
-
-# # production stage
-# FROM nginx:1.15.7-alpine as production-stage
-# COPY --from=build-stage "${DDT_ROOT}"/dist /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]

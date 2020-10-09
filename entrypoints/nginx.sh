@@ -7,10 +7,10 @@ echo "### DDT: NGINX -- WAITING FOR API"
 export API_STATUS_CMD="wget --server-response --spider http://api:8000 2>&1 | grep "HTTP/" | awk '{print $2}'"
 while [ -z "$(eval ${API_STATUS_CMD})" ]; do sleep 1s; done
 
-# # Espera que el servicio de vue haya sido lanzado
-# echo "### DDT: NGINX -- WAITING FOR VUE"
-# export VUE_STATUS_CMD="wget --server-response --spider http://vue:8080 2>&1 | grep "HTTP/" | awk '{print $2}'"
-# while [ -z "$(eval ${VUE_STATUS_CMD})" ]; do sleep 1s; done
+# Espera que el servicio de vue haya sido lanzado
+echo "### DDT: NGINX -- WAITING FOR VUE"
+export VUE_STATUS_CMD="wget --server-response --spider http://vue:8080 2>&1 | grep "HTTP/" | awk '{print $2}'"
+while [ -z "$(eval ${VUE_STATUS_CMD})" ]; do sleep 1s; done
 
 # Si no está en producción, se ejecuta con la configuración básica (sin SSL)
 if [ "$DDT_ENV" != "prod" ]; then
@@ -23,7 +23,7 @@ fi
 export LETSENCRYPT_DIR=/etc/letsencrypt
 
 # Si los certificados se crearon para dominios distintos, los elimina
-if [ -e "${LETSENCRYPT_DIR}/ulagos_ssl_done" ] && [[ "$(cat ${LETSENCRYPT_DIR}/ulagos_ssl_done)" != "${DDT_API_DOMAINS} ${DDT_VUE_DOMAINS}" ]]; then
+if [ -e "${LETSENCRYPT_DIR}/ulagos_ssl_done" ] && [[ "$(cat ${LETSENCRYPT_DIR}/ulagos_ssl_done)" != "${DDT_API_DOMAINS} ${DDT_VUE_DOMAINS__SERVER_NAME}" ]]; then
 	echo "### DDT: NGINX -- OBSOLETE CERTIFICATE"
 	rm -rf ${LETSENCRYPT_DIR}/ulagos_ssl_done
 fi
