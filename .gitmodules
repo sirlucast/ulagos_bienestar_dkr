@@ -1,6 +1,6 @@
 [submodule "api"]
-	path = api
-	url = git@github.com:Universidad-de-Los-Lagos/bienestar_api.git
+        path = api
+        url = https://github.com/Universidad-de-Los-Lagos/bienestar_api.git
 [submodule "frontend"]
-	path = frontend
-	url = git@github.com:Universidad-de-Los-Lagos/bienestar_frontend.git
+        path = frontend
+        url = https://github.com/Universidad-de-Los-Lagos/bienestar_frontend.git
