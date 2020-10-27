@@ -109,25 +109,25 @@ volumes:
   vol_postgresdb:
   vol_certbot:
   vol_static:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/static
       o: bind
   vol_media:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/media
       o: bind
   vol_logs:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/logs
       o: bind
   vol_letsencrypt:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/letsencrypt
