@@ -34,23 +34,23 @@ services:
     depends_on:
       - postgresdb   
     restart: 'always'
-  frontend:  # Contenedor vue
-    build:
-      context: ./
-      dockerfile: ./Dockerfile-front
-      args:
-        - DDT_ROOT=${DDT_ROOT}
-    env_file:
-      - .env
-    entrypoint:
-      - sh
-      - ${DDT_ROOT}/entrypoints/frontend.sh
-    volumes:
-      - ./frontend/src/:${DDT_ROOT}/src/
-      - ./entrypoints:${DDT_ROOT}/entrypoints/
-    networks:
-      - net_frontend
-    restart: 'always'
+  # frontend:  # Contenedor vue
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile-front
+  #     args:
+  #       - DDT_ROOT=${DDT_ROOT}
+  #   env_file:
+  #     - .env
+  #   entrypoint:
+  #     - sh
+  #     - ${DDT_ROOT}/entrypoints/frontend.sh
+  #   volumes:
+  #     - ./frontend/src/:${DDT_ROOT}/src/
+  #     - ./entrypoints:${DDT_ROOT}/entrypoints/
+  #   networks:
+  #     - net_frontend
+  #   restart: 'always'
   nginx:  # Contenedor nginx (reverse proxy)
     image: nginx:1.19.0-alpine
     ports:
