@@ -10,7 +10,7 @@ services:
       - .env
     networks:
       - main
-    restart: "unless-stopped"
+    restart: "always"
   backend: # Backend DJango REST API
     container_name: backend
     build:
@@ -23,6 +23,7 @@ services:
     entrypoint:
       - sh
       - ${DDT_ROOT}/start.sh
+    # command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/${DDT_ROOT}/
       - vol_static:${DDT_ROOT}/static
@@ -34,44 +35,63 @@ services:
       - postgresdb
     networks:
       - main
+    restart: "always"
+  # frontend: # Frontend VueJS
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #   volumes:
+  #     - ./frontend:/app/frontend
+  #     - '/app/node_modules'
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - main
+  #   depends_on:
+  #     - backend
+  #     - postgresdb
+  #   environment:
+  #     - NODE_ENV=development
+  #   restart: 'always'
   nginx: # Contenedor nginx (reverse proxy)
     container_name: nginx
+    image: nginx:alpine
     build:
       context: .
-      dockerfile: nginx/prod/Dockerfile
+      dockerfile: nginx/dev/Dockerfile
       args:
         - DDT_SRC_DIR=${DDT_ROOT}
     env_file:
       - .env
     ports:
       - "80:80"
+    depends_on:
+      - backend
+      # - frontend
     volumes:
-      - ./nginx/prod/prod.conf:/etc/nginx/nginx.conf:ro
-      # - ./nginx/prod/nginx.sh:/etc/nginx/
+      - ./nginx/dev/dev.conf:/etc/nginx/nginx.conf:ro
       - vol_static:${DDT_ROOT}/static
       - vol_media:${DDT_ROOT}/media
     networks:
       - main
-    restart: "unless-stopped"
-    depends_on:
-      - backend
+    restart: "always"
 
 volumes:
   vol_postgresdb:
   vol_static:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/static
       o: bind
   vol_media:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/media
       o: bind
   vol_logs:
-    driver: local
+    # driver: local
     driver_opts:
       type: none
       device: ${PWD}/vol/logs
